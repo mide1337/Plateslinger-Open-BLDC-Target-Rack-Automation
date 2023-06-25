@@ -1,4 +1,14 @@
+// *******************************************************************
+//  ESP32 code
+//  for   https://github.com/mide1337/arduino-bldc-motor-control
+//
+//  Copyright (C) 2023 Sebastian Stegmaier <sebastian@stegm.de>
+//
+// *******************************************************************
+
+
 /*
+ ideas from:
   Rui Santos
   Complete project details at https://RandomNerdTutorials.com/esp-now-esp32-arduino-ide/
 

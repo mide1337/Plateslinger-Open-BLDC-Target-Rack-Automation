@@ -1,3 +1,11 @@
+// *******************************************************************
+//  ESP32 code
+//  for   https://github.com/mide1337/arduino-bldc-motor-control
+//
+//  Copyright (C) 2023 Sebastian Stegmaier <sebastian@stegm.de>
+//
+// *******************************************************************
+
 
 byte PIN_DrehzahlSignal = 33;
 // 0,1 - 5V Analog

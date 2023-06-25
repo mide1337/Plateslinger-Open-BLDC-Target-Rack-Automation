@@ -1,3 +1,13 @@
+// *******************************************************************
+//  Arduino Uno code
+//  for   https://github.com/mide1337/arduino-bldc-motor-control
+//
+//  Copyright (C) 2023 Sebastian Stegmaier <sebastian@stegm.de>
+//
+// *******************************************************************
+
+
+
 // ****** Pin analog roundsSignal Ausgabe 0 BIS 5V*******
 /* Uno pins 5 and 6: 980 Hz */
 byte PIN_roundsSignal = 5;
