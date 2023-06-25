@@ -1,25 +1,25 @@
-// ****** Pin analog DrehzahlSignal Ausgabe 0 BIS 5V*******
+// ****** Pin analog roundsSignal Ausgabe 0 BIS 5V*******
 /* Uno pins 5 and 6: 980 Hz */
-byte PIN_DrehzahlSignal = 5;
+byte PIN_roundsSignal = 5;
 
 // 0,1 - 5V Analog
-// grünes Kabel
-float Volt_Drehzahl = 0;
+// green Kabel
+float Volt_rounds = 0;
 // Motor action!
 byte PIN_go = 12;
 bool RPMswitch = true;
 
-// ****** Pin analog Drehrichtung Ausgabe 0 ODER 5V *******
+// ****** Pin analog turn_direction Ausgabe 0 ODER 5V *******
 // blaues Kabel
 // Z / F
-byte PIN_DrehRichtung = 4;
+byte PIN_turn_direction = 4;
 
 // Linksdrehung TRUE (5V), Rechtsdrehung FALSE (0V)
-bool Drehrichtung = false;
+bool turn_direction = false;
 
 
-// Drehzahlmessung
-byte PIN_DrehzahlMessung = 8;
+// rounds_measure
+byte PIN_rounds_measure = 8;
 int coil_measure_new = 0;
 int coil_measure_old = 0;
 int coil_passed = 0;
@@ -27,13 +27,13 @@ unsigned long last_turn = 0;
 unsigned long last_turn_time = 0;
 int RPM;
 
-// PWM wird von Volt Drehzahl gemappt
-long PWM_Drehzahl = 0;
+// PWM wird von Volt rounds gemappt
+long PWM_rounds = 0;
 
-// Textausgabe
+// Tests with text output over serial (with sprint function)
 char AktuelleWerte[50];
 
-// Zeitfunktionen
+// for time functions
 unsigned long old_time;
 unsigned long time_point;
 unsigned long time_point_2;
@@ -41,8 +41,8 @@ unsigned long time_point_2;
 
 void setup() {
   Serial.begin(9600);
-  pinMode(PIN_DrehRichtung, OUTPUT);
-  pinMode(PIN_DrehzahlMessung, INPUT);
+  pinMode(PIN_turn_direction, OUTPUT);
+  pinMode(PIN_rounds_measure, INPUT);
 
   // ON off Motor
   pinMode(PIN_go, INPUT);
@@ -52,46 +52,46 @@ void loop() {
   if (millis() - 1000 >= old_time) {
     old_time = millis();
     // 0 bis 5 auf 0 bis 255
-    // PWM_Drehzahl = map(Volt_Drehzahl, 0, 5, 0, 255);
+    // PWM_rounds = map(Volt_rounds, 0, 5, 0, 255);
     // Mit Dreisatz
-    PWM_Drehzahl = (Volt_Drehzahl / 5) * 255;
+    PWM_rounds = (Volt_rounds / 5) * 255;
 
     // Werte ausgeben
-    //sprintf(AktuelleWerte, "Volt_Drehzahl ist %d, PWM_Drehzahl ist %d.", 2, PWM_Drehzahl);
+    //sprintf(AktuelleWerte, "Volt_rounds ist %d, PWM_rounds ist %d.", 2, PWM_rounds);
     //Serial.println(AktuelleWerte);
-    /*Serial.print("Drehzahl in Volt: ");
-    Serial.print(Volt_Drehzahl);
+    /*Serial.print("rounds in Volt: ");
+    Serial.print(Volt_rounds);
     Serial.print("  PWM Scale: ");
-    Serial.println(PWM_Drehzahl);*/
+    Serial.println(PWM_rounds);*/
   }
   setRPM();
   handleRPM();
 
-  // Signal für Drehzahl ausgeben
-  analogWrite(PIN_DrehzahlSignal, PWM_Drehzahl);
+  // Signal für rounds ausgeben
+  analogWrite(PIN_roundsSignal, PWM_rounds);
 
-  // Signal für Drehrichtung ausgeben
-  digitalWrite(PIN_DrehRichtung, Drehrichtung);
+  // Signal für turn_direction ausgeben
+  digitalWrite(PIN_turn_direction, turn_direction);
 }
 
 void setRPM() {
   // Nur anschalten wenn letzte Umdrehung 5s her ist
   //Serial.println(digitalRead(PIN_go));
-  //Serial.println(digitalRead(Volt_Drehzahl));
+  //Serial.println(digitalRead(Volt_rounds));
 
   if (digitalRead(PIN_go) == 1 || 1) {
-    Volt_Drehzahl = 0.6;
+    Volt_rounds = 0.6;
   } else {
-    Volt_Drehzahl = 0;
+    Volt_rounds = 0;
   }
   if (millis() - time_point >= 5000) {
-    //Volt_Drehzahl = 1;
+    //Volt_rounds = 1;
     // if (RPMswitch) {
     //   RPMswitch = false;
-    //   Volt_Drehzahl = 5;
+    //   Volt_rounds = 5;
     // } else {
     //   RPMswitch = true;
-    //   Volt_Drehzahl = 5;
+    //   Volt_rounds = 5;
     // }
   }
 }
@@ -105,7 +105,7 @@ void handleRPM() {
     last_turn = millis();
     c = 0;
     //Serial.println("coil_passed/81");
-    Volt_Drehzahl = 0;
+    Volt_rounds = 0;
 
     // 5s warten bis Volt wieder auf 5V geschalten werden
     time_point = millis();
@@ -117,7 +117,7 @@ void measureRPM() {
   // Messung nur innerhalb eines Zeitfensters ausführen
   if (millis() < (time_point_2 + 1000)) {
 
-    coil_measure_old = digitalRead(PIN_DrehzahlMessung);
+    coil_measure_old = digitalRead(PIN_rounds_measure);
     // Serial.println(coil_measure_old);
 
     // positive Flanke -> drei Hall Sensoren über Spule gefahren (1/27 Umdrehung)
@@ -126,7 +126,7 @@ void measureRPM() {
       coil_passed++;
     }
 
-    coil_measure_new = digitalRead(PIN_DrehzahlMessung);
+    coil_measure_new = digitalRead(PIN_rounds_measure);
     //Serial.println(coil_measure_new);
   } else {
     time_point_2 = millis();
